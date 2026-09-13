@@ -1,0 +1,9 @@
+﻿node_modules
+.quasar
+dist
+pnpm-lock.yaml
+AGENTS.md
+docs/PRODUCT_SPEC.md
+test-results
+playwright-report
+src/router/typed-router.d.ts
