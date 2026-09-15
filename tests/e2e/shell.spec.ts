@@ -19,6 +19,18 @@ for (const [width, height] of [
     await page.screenshot({ path: `test-results/home-${width}x${height}.png` });
     await page.getByRole('button', { name: '練習設定', exact: true }).click();
     await expect(page.getByRole('button', { name: '第 25 課', exact: true })).toBeVisible();
+    await page.getByRole('button', { name: '全選課程', exact: true }).click();
+    await expect(page.locator('.lesson-grid button[aria-pressed="true"]')).toHaveCount(25);
+    await expect(page.getByRole('button', { name: '取消全選課程', exact: true })).toHaveText(
+      '清空',
+    );
+    await expect(page.getByRole('button', { name: '第 25 課', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await page.getByRole('button', { name: '取消全選課程', exact: true }).click();
+    await expect(page.locator('.lesson-grid button[aria-pressed="true"]')).toHaveCount(0);
+    await page.getByRole('button', { name: '第 18 課', exact: true }).click();
     await page.getByRole('button', { name: '第 3 課', exact: true }).click();
     await page.getByRole('button', { name: '第 5 課', exact: true }).click();
     await expect(page.getByRole('button', { name: '第 3 課', exact: true })).toHaveAttribute(
@@ -26,7 +38,17 @@ for (const [width, height] of [
       'true',
     );
     await page.screenshot({ path: `test-results/settings-${width}x${height}.png` });
-    await page.getByText('助詞', { exact: true }).click();
+    await page.getByRole('button', { name: '全選助詞', exact: true }).click();
+    await expect(page.getByRole('button', { name: 'は', exact: true })).toBeVisible();
+    await expect(page.locator('.particle-grid button[aria-pressed="true"]')).toHaveCount(11);
+    await expect(page.getByRole('button', { name: 'は', exact: true })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+    await page.getByRole('button', { name: '取消全選助詞', exact: true }).click();
+    await expect(page.locator('.particle-grid button[aria-pressed="true"]')).toHaveCount(0);
+    await page.getByRole('button', { name: 'に', exact: true }).click();
+    await page.getByRole('button', { name: 'で', exact: true }).click();
     await page.getByRole('button', { name: 'まで', exact: true }).click();
     await expect(page.getByRole('button', { name: 'まで', exact: true })).toHaveAttribute(
       'aria-pressed',
@@ -61,7 +83,7 @@ test('settings persist after reload and reopening, with mode validation', async 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
   await page.getByRole('button', { name: '開始', exact: true }).click();
-  await expect(page.getByRole('status')).toContainText('練習即將開放');
+  await expect(page.getByRole('status')).toHaveCount(0);
   await page.getByRole('button', { name: '練習設定', exact: true }).click();
   await page.getByRole('button', { name: '第 3 課', exact: true }).click();
   await page.getByRole('button', { name: '第 5 課', exact: true }).click();
@@ -83,7 +105,6 @@ test('settings persist after reload and reopening, with mode validation', async 
   await expect(
     page.getByRole('region', { name: '目前練習設定' }).getByText('第 3、5、18 課', { exact: true }),
   ).toBeVisible();
-  await expect(page.getByRole('region', { name: '目前練習設定' })).toContainText('混合');
   const reopened = await context.newPage();
   await reopened.goto('/');
   await expect(reopened.getByText('第 3、5、18 課', { exact: true })).toBeVisible();

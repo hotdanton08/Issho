@@ -33,11 +33,6 @@ button {
   letter-spacing: 2px;
   color: #34725c;
 }
-.brand-caption {
-  font-size: 11px;
-  color: #738178;
-  letter-spacing: 2px;
-}
 .icon-button {
   color: #63736b;
   min-width: 48px;
@@ -52,12 +47,6 @@ button {
 }
 .practice-summary {
   text-align: center;
-}
-.eyebrow {
-  color: #758277;
-  font-size: 13px;
-  letter-spacing: 3px;
-  margin: 0 0 24px;
 }
 .lesson-emblem {
   width: 174px;
@@ -75,12 +64,6 @@ button {
 .lesson-emblem > * {
   transform: rotate(5deg);
 }
-.lesson-kicker {
-  font-size: 10px;
-  letter-spacing: 3px;
-  color: #60754a;
-  font-weight: 700;
-}
 .lesson-emblem h1 {
   font-size: 76px;
   font-weight: 800;
@@ -88,10 +71,6 @@ button {
   letter-spacing: -4px;
   margin: 5px 0;
   color: #435f34;
-}
-.lesson-unit {
-  color: #60754a;
-  font-size: 12px;
 }
 .multiple-lessons h1 {
   font-size: 48px;
@@ -121,13 +100,6 @@ button {
   background: white;
   font-size: 27px;
   font-weight: 700;
-}
-.mode-pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  font-size: 13px;
-  color: #6b786f;
 }
 .start-area {
   margin-top: 42px;
@@ -159,11 +131,8 @@ button {
 .home-footer {
   text-align: center;
 }
-.tune-button .q-btn__content {
-  flex-direction: column;
-  gap: 7px;
-}
 .tune-button {
+  min-height: 48px;
   color: #748178;
   font-size: 12px;
   padding: 10px 22px;
@@ -182,7 +151,7 @@ button {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 24px 22px 16px;
+  padding: 12px 22px 8px;
   flex-shrink: 0;
 }
 .panel-header h2 {
@@ -191,10 +160,8 @@ button {
   font-weight: 700;
   margin: 0 0 6px;
 }
-.panel-header p {
-  margin: 0;
-  color: #738178;
-  font-size: 12px;
+.panel-header .icon-button {
+  margin-left: auto;
 }
 .panel-content {
   overflow-y: auto;
@@ -230,6 +197,39 @@ button {
   justify-items: center;
   gap: 12px 7px;
   padding: 8px 12px 22px;
+}
+.bulk-selection-section {
+  position: relative;
+}
+.bulk-selection-section .section-header .q-item__section--main {
+  padding-right: 68px;
+  min-width: 0;
+}
+.bulk-selection-section .q-item__label--caption {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.select-all-button {
+  position: absolute;
+  top: 17px;
+  right: 44px;
+  width: 64px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 22px;
+  font-size: 14px;
+  font-weight: 700;
+  background: #f7f9f4;
+  color: #73886c;
+  border: 2px solid #e8ece3;
+  box-shadow: 0 2px 0 #e8ece3;
+}
+.select-all-button.selected {
+  background: #e5efdc;
+  border-color: #6e9655;
+  color: #375827;
+  box-shadow: 0 2px 0 #6e9655;
 }
 .selection-button {
   background: #f7f9f4;
@@ -318,9 +318,6 @@ button {
 @media (max-height: 720px) {
   .home-main {
     padding-top: 20px;
-  }
-  .eyebrow {
-    margin-bottom: 16px;
   }
   .lesson-emblem {
     width: 144px;

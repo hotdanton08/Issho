@@ -83,4 +83,27 @@ describe('settings persistence and validation', () => {
     expect(() => store.toggleLesson(3)).not.toThrow();
     expect(store.storageUnavailable).toBe(true);
   });
+  it('selects all, supports individual deselection, and persists clearing', () => {
+    const store = useSettingsStore();
+    store.toggleAllLessons();
+    store.toggleAllParticles();
+    expect(store.settings.selectedLessons).toEqual(Array.from({ length: 25 }, (_, i) => i + 1));
+    expect(store.settings.selectedParticles).toHaveLength(11);
+    expect(store.allLessonsSelected).toBe(true);
+    expect(store.allParticlesSelected).toBe(true);
+    store.toggleLesson(18);
+    store.toggleParticle('に');
+    expect(store.allLessonsSelected).toBe(false);
+    expect(store.allParticlesSelected).toBe(false);
+    store.toggleAllLessons();
+    store.toggleAllParticles();
+    expect(store.settings.selectedLessons).toContain(18);
+    expect(store.settings.selectedParticles).toContain('に');
+    store.toggleAllLessons();
+    store.toggleAllParticles();
+    setActivePinia(createPinia());
+    expect(useSettingsStore().settings.selectedLessons).toEqual([]);
+    expect(useSettingsStore().settings.selectedParticles).toEqual([]);
+    expect(useSettingsStore().issue).toBe('請選擇至少一課');
+  });
 });

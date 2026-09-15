@@ -35,6 +35,18 @@ export const useSettingsStore = defineStore('settings', () => {
     () => MODES.find((item) => item.value === settings.value.practiceMode) ?? MODES[0],
   );
   const issue = computed(() => settingsIssue(settings.value));
+  const allLessonsSelected = computed(() => settings.value.selectedLessons.length === 25);
+  const allParticlesSelected = computed(
+    () => settings.value.selectedParticles.length === PARTICLES.length,
+  );
+  function toggleAllLessons() {
+    settings.value.selectedLessons = allLessonsSelected.value
+      ? []
+      : Array.from({ length: 25 }, (_, index) => index + 1);
+  }
+  function toggleAllParticles() {
+    settings.value.selectedParticles = allParticlesSelected.value ? [] : [...PARTICLES];
+  }
   function toggleLesson(lesson: number) {
     if (!Number.isInteger(lesson) || lesson < 1 || lesson > 25) return;
     const current = settings.value.selectedLessons;
@@ -55,6 +67,10 @@ export const useSettingsStore = defineStore('settings', () => {
     particleLabel,
     mode,
     issue,
+    allLessonsSelected,
+    allParticlesSelected,
+    toggleAllLessons,
+    toggleAllParticles,
     toggleLesson,
     toggleParticle,
   };

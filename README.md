@@ -3,7 +3,7 @@
 以 Vue 3、TypeScript、Quasar CLI with Vite 與 Pinia 建立的 mobile-first App。
 
 目前範圍為 **Phase 1 — App Shell**：首頁、練習設定、App 設定，以及 localStorage persistence。
-「開始」會顯示練習尚未開放的提示；正式作答留待 Phase 2。
+首頁只保留課程、助詞與主要操作；「開始」目前尚未接上作答流程，也不顯示佔位提示。正式作答留待 Phase 2。
 
 ## 開發與驗證
 

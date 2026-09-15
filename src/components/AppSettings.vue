@@ -5,7 +5,7 @@ const open = defineModel<boolean>({ required: true });
 const store = useSettingsStore();
 </script>
 <template>
-  <SettingsPanel v-model="open" title="App 設定" subtitle="讓練習聽起來，剛剛好。">
+  <SettingsPanel v-model="open" title="App 設定">
     <div class="audio-setting">
       <q-icon name="volume_up" size="26px" /><span>音效</span
       ><q-toggle
