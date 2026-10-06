@@ -82,7 +82,6 @@ test('settings persist after reload and reopening, with mode validation', async 
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto('/');
-  await page.getByRole('button', { name: '開始', exact: true }).click();
   await expect(page.getByRole('status')).toHaveCount(0);
   await page.getByRole('button', { name: '練習設定', exact: true }).click();
   await page.getByRole('button', { name: '第 3 課', exact: true }).click();
@@ -96,7 +95,8 @@ test('settings persist after reload and reopening, with mode validation', async 
   await page.getByText('模式', { exact: true }).click();
   await page.getByRole('button', { name: '混合', exact: true }).click();
   await page.getByRole('button', { name: '完成', exact: true }).click();
-  await expect(page.getByRole('button', { name: '開始', exact: true })).toBeEnabled();
+  await expect(page.getByRole('button', { name: '開始', exact: true })).toBeDisabled();
+  await expect(page.getByRole('status')).toHaveText('目前開放選助詞模式');
   await page.getByRole('button', { name: 'App 設定', exact: true }).click();
   await page.getByRole('switch', { name: '音效', exact: true }).click();
   await page.getByRole('switch', { name: '日文語音', exact: true }).click();

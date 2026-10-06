@@ -1,14 +1,19 @@
 ﻿<script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
+import PracticeSession from '../../components/PracticeSession.vue';
+import { practiceIssue } from '../../services/practice';
 import PracticeSettings from '../../components/PracticeSettings.vue';
 import AppSettings from '../../components/AppSettings.vue';
 import { useSettingsStore } from '../../stores/settings';
 const store = useSettingsStore();
 const practiceOpen = ref(false);
 const appOpen = ref(false);
+const practicing = ref(false);
+const startIssue = computed(() => practiceIssue(store.settings));
 </script>
 <template>
-  <q-page class="home-page">
+  <PracticeSession v-if="practicing" :settings="store.settings" @leave="practicing = false" />
+  <q-page v-else class="home-page">
     <header class="home-header">
       <div class="brand">
         <span class="brand-mark" lang="ja">いっしょ</span>
@@ -54,11 +59,12 @@ const appOpen = ref(false);
           icon="play_arrow"
           label="開始"
           class="primary-button start-button"
-          :disable="!!store.issue"
-          :aria-describedby="store.issue ? 'start-hint' : undefined"
+          :disable="!!startIssue"
+          :aria-describedby="startIssue ? 'start-hint' : undefined"
+          @click="practicing = true"
         />
-        <p v-if="store.issue" id="start-hint" class="start-hint" role="status">
-          {{ store.issue }}
+        <p v-if="startIssue" id="start-hint" class="start-hint" role="status">
+          {{ startIssue }}
         </p>
       </div>
     </main>
