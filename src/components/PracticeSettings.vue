@@ -1,12 +1,18 @@
 ﻿<script setup lang="ts">
 import SettingsPanel from './SettingsPanel.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { useSettingsStore } from '../stores/settings';
 import { MODES, PARTICLES } from '../types/settings';
 const open = defineModel<boolean>({ required: true });
 const store = useSettingsStore();
-const lessonsOpen = ref(true);
+const lessonsOpen = ref(false);
 const particlesOpen = ref(false);
+const modeOpen = ref(false);
+watch(open, () => {
+  lessonsOpen.value = false;
+  particlesOpen.value = false;
+  modeOpen.value = false;
+});
 function toggleAllLessons() {
   lessonsOpen.value = true;
   store.toggleAllLessons();
@@ -18,9 +24,13 @@ function toggleAllParticles() {
 </script>
 <template>
   <SettingsPanel v-model="open" title="練習設定" hide-title>
-    <div class="settings-section bulk-selection-section">
+    <div
+      class="settings-section bulk-selection-section"
+      :class="{ 'selection-expanded': lessonsOpen }"
+    >
       <q-expansion-item
         v-model="lessonsOpen"
+        group="practice-settings"
         label="範圍"
         :caption="store.lessonLabel"
         icon="auto_stories"
@@ -48,6 +58,7 @@ function toggleAllParticles() {
         </div>
       </q-expansion-item>
       <q-btn
+        v-if="lessonsOpen"
         unelevated
         class="select-all-button"
         :class="{ selected: store.allLessonsSelected }"
@@ -58,9 +69,13 @@ function toggleAllParticles() {
         @click="toggleAllLessons"
       />
     </div>
-    <div class="settings-section bulk-selection-section">
+    <div
+      class="settings-section bulk-selection-section"
+      :class="{ 'selection-expanded': particlesOpen }"
+    >
       <q-expansion-item
         v-model="particlesOpen"
+        group="practice-settings"
         label="助詞"
         :caption="store.particleLabel"
         icon="translate"
@@ -88,6 +103,7 @@ function toggleAllParticles() {
         </div>
       </q-expansion-item>
       <q-btn
+        v-if="particlesOpen"
         unelevated
         class="select-all-button"
         :class="{ selected: store.allParticlesSelected }"
@@ -99,6 +115,8 @@ function toggleAllParticles() {
       />
     </div>
     <q-expansion-item
+      v-model="modeOpen"
+      group="practice-settings"
       label="模式"
       :caption="store.mode.label"
       icon="widgets"

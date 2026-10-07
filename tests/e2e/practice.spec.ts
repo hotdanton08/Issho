@@ -1,4 +1,5 @@
 import { expect, test } from '@playwright/test';
+import { EXAMPLES } from '../../src/data/examples';
 
 for (const [width, height] of [
   [375, 667],
@@ -17,13 +18,12 @@ for (const [width, height] of [
       await expect(page.locator('.question-count')).toHaveText(`${index + 1} / 10`);
       await expect(page.getByRole('button', { name: /播放|語音/ })).toHaveCount(0);
       const sentence = await page.locator('.question-sentence').innerText();
-      const correct = sentence.includes('前（') ? 'に' : 'で';
+      const example = EXAMPLES.find((e) => e.sentenceWithBlank === sentence)!;
+      const correct = example.particle;
       const answer = index < 7 ? correct : correct === 'に' ? 'で' : 'に';
       await page.getByRole('button', { name: answer, exact: true }).click();
       await expect(page.getByRole('status')).toContainText(index < 7 ? '正確！' : '不對');
-      await expect(page.getByRole('status')).toContainText(
-        correct === 'に' ? '時間點' : '動作場所',
-      );
+      await expect(page.getByRole('status')).toContainText(example.usage);
       await expect(page.locator('.answer-choices button:disabled')).toHaveCount(2);
       const button = await page.getByRole('button', { name: '繼續', exact: true }).boundingBox();
       expect(button!.y + button!.height).toBeLessThanOrEqual(height!);
@@ -52,6 +52,7 @@ for (const [width, height] of [
 test('unavailable lessons do not silently use lesson 18', async ({ page }) => {
   await page.goto('/');
   await page.getByRole('button', { name: '練習設定', exact: true }).click();
+  await page.getByText('範圍', { exact: true }).click();
   await page.getByRole('button', { name: '第 18 課', exact: true }).click();
   await page.getByRole('button', { name: '第 17 課', exact: true }).click();
   await page.getByRole('button', { name: '完成', exact: true }).click();

@@ -18,6 +18,8 @@ for (const [width, height] of [
     );
     await page.screenshot({ path: `test-results/home-${width}x${height}.png` });
     await page.getByRole('button', { name: '練習設定', exact: true }).click();
+    await expect(page.getByRole('button', { name: '第 25 課', exact: true })).not.toBeVisible();
+    await page.getByText('範圍', { exact: true }).click();
     await expect(page.getByRole('button', { name: '第 25 課', exact: true })).toBeVisible();
     await page.getByRole('button', { name: '全選課程', exact: true }).click();
     await expect(page.locator('.lesson-grid button[aria-pressed="true"]')).toHaveCount(25);
@@ -38,6 +40,8 @@ for (const [width, height] of [
       'true',
     );
     await page.screenshot({ path: `test-results/settings-${width}x${height}.png` });
+    await page.getByText('助詞', { exact: true }).click();
+    await expect(page.getByRole('button', { name: '第 25 課', exact: true })).not.toBeVisible();
     await page.getByRole('button', { name: '全選助詞', exact: true }).click();
     await expect(page.getByRole('button', { name: 'は', exact: true })).toBeVisible();
     await expect(page.locator('.particle-grid button[aria-pressed="true"]')).toHaveCount(11);
@@ -55,6 +59,7 @@ for (const [width, height] of [
       'true',
     );
     await page.getByText('模式', { exact: true }).click();
+    await expect(page.getByRole('button', { name: 'まで', exact: true })).not.toBeVisible();
     await page.getByRole('button', { name: '助詞用途', exact: true }).click();
     await expect(page.getByRole('button', { name: '助詞用途', exact: true })).toHaveAttribute(
       'aria-pressed',
@@ -84,6 +89,7 @@ test('settings persist after reload and reopening, with mode validation', async 
   await page.goto('/');
   await expect(page.getByRole('status')).toHaveCount(0);
   await page.getByRole('button', { name: '練習設定', exact: true }).click();
+  await page.getByText('範圍', { exact: true }).click();
   await page.getByRole('button', { name: '第 3 課', exact: true }).click();
   await page.getByRole('button', { name: '第 5 課', exact: true }).click();
   await page.getByText('助詞', { exact: true }).click();
@@ -95,8 +101,8 @@ test('settings persist after reload and reopening, with mode validation', async 
   await page.getByText('模式', { exact: true }).click();
   await page.getByRole('button', { name: '混合', exact: true }).click();
   await page.getByRole('button', { name: '完成', exact: true }).click();
-  await expect(page.getByRole('button', { name: '開始', exact: true })).toBeDisabled();
-  await expect(page.getByRole('status')).toHaveText('目前開放選助詞模式');
+  await expect(page.getByRole('button', { name: '開始', exact: true })).toBeEnabled();
+  await expect(page.getByRole('status')).toHaveCount(0);
   await page.getByRole('button', { name: 'App 設定', exact: true }).click();
   await page.getByRole('switch', { name: '音效', exact: true }).click();
   await page.getByRole('switch', { name: '日文語音', exact: true }).click();
@@ -120,4 +126,27 @@ test('settings persist after reload and reopening, with mode validation', async 
     soundEnabled: false,
     japaneseSpeechEnabled: false,
   });
+});
+
+test('settings reopen collapsed and opening one section closes the other', async ({ page }) => {
+  await page.goto('/');
+  const open = page.getByRole('button', { name: '練習設定', exact: true });
+  await open.click();
+  await expect(page.locator('.lesson-grid')).not.toBeVisible();
+  await expect(page.locator('.particle-grid')).not.toBeVisible();
+  await expect(page.locator('.mode-grid')).not.toBeVisible();
+  await page.screenshot({ path: 'test-results/settings-collapsed.png' });
+  await page.getByText('範圍', { exact: true }).click();
+  await expect(page.locator('.lesson-grid')).toBeVisible();
+  await page.getByText('助詞', { exact: true }).click();
+  await expect(page.locator('.particle-grid')).toBeVisible();
+  await expect(page.locator('.lesson-grid')).not.toBeVisible();
+  await page.getByText('模式', { exact: true }).click();
+  await expect(page.locator('.mode-grid')).toBeVisible();
+  await expect(page.locator('.particle-grid')).not.toBeVisible();
+  await page.getByRole('button', { name: '完成', exact: true }).click();
+  await open.click();
+  await expect(page.locator('.mode-grid')).not.toBeVisible();
+  await expect(page.locator('.lesson-grid')).not.toBeVisible();
+  await expect(page.locator('.particle-grid')).not.toBeVisible();
 });

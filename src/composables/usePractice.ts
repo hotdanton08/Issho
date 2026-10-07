@@ -1,6 +1,6 @@
 import { computed, ref } from 'vue';
 import type { PracticeSession } from '../types/practice';
-import type { Particle, Settings } from '../types/settings';
+import type { Settings } from '../types/settings';
 import { createSession, sessionScore, submitAnswer } from '../services/practice';
 
 export function usePractice() {
@@ -19,8 +19,8 @@ export function usePractice() {
     session.value = createSession(settings);
     index.value = 0;
   }
-  function answer(particle: Particle) {
-    if (session.value && !feedback.value && !finished.value) submitAnswer(session.value, particle);
+  function answer(choice: string) {
+    if (session.value && !feedback.value && !finished.value) submitAnswer(session.value, choice);
   }
   function next() {
     if (feedback.value) index.value++;

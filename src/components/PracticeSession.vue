@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { usePractice } from '../composables/usePractice';
+import { computed } from 'vue';
 import type { Settings } from '../types/settings';
 
 const props = defineProps<{ settings: Settings }>();
@@ -7,6 +8,14 @@ const emit = defineEmits<{ leave: [] }>();
 const { session, index, question, feedback, finished, score, progress, start, answer, next } =
   usePractice();
 start(props.settings);
+const title = computed(() =>
+  question.value?.type === 'usage'
+    ? '這個助詞表示什麼？'
+    : question.value?.type === 'error'
+      ? '這句話的助詞對嗎？'
+      : '選出適合的助詞',
+);
+const sentenceParts = computed(() => question.value?.example.sentenceWithBlank.split('（　）'));
 function restart() {
   if (session.value) start(session.value.settings);
 }
@@ -35,9 +44,24 @@ function restart() {
     <template v-if="!finished && question">
       <main class="question-main">
         <p class="question-count">{{ index + 1 }} / {{ session?.questions.length }}</p>
-        <h1>選出適合的助詞</h1>
-        <p class="question-sentence" lang="ja">{{ question.example.sentenceWithBlank }}</p>
-        <div class="answer-choices" aria-label="答案選項">
+        <h1>{{ title }}</h1>
+        <p class="question-sentence" lang="ja">
+          <template v-if="question.type === 'usage'"
+            >{{ sentenceParts?.[0]
+            }}<mark :aria-label="`助詞 ${question.example.particle}`">{{
+              question.example.particle
+            }}</mark
+            >{{ sentenceParts?.[1] }}</template
+          ><template v-else>{{ question.sentence }}</template>
+        </p>
+        <div
+          class="answer-choices"
+          :class="{
+            'text-choices': question.type === 'usage',
+            'error-choices': question.type === 'error',
+          }"
+          aria-label="答案選項"
+        >
           <q-btn
             v-for="particle in question.choices"
             :key="particle"
@@ -45,12 +69,26 @@ function restart() {
             no-caps
             class="answer-button"
             :class="{
-              'answer-correct': feedback && particle === question.example.particle,
+              'answer-correct': feedback && particle === question.correctAnswer,
               'answer-wrong': feedback && particle === feedback.answer && !feedback.correct,
             }"
             :disable="!!feedback"
-            :label="particle"
-            lang="ja"
+            :label="question.type === 'error' ? undefined : particle"
+            :icon="
+              question.type === 'error'
+                ? particle === '沒問題'
+                  ? 'radio_button_unchecked'
+                  : 'close'
+                : undefined
+            "
+            :aria-label="
+              question.type === 'error'
+                ? particle === '沒問題'
+                  ? '正確句子'
+                  : '錯誤句子'
+                : particle
+            "
+            :lang="question.type === 'particle' ? 'ja' : 'zh-Hant'"
             @click="answer(particle)"
           />
         </div>
@@ -68,9 +106,25 @@ function restart() {
         </div>
         <p class="feedback-answer">
           {{ feedback.correct ? '' : '正解：'
-          }}<span lang="ja">{{ question.example.particle }}</span>
+          }}<q-icon
+            v-if="question.type === 'error'"
+            :name="question.correctAnswer === '沒問題' ? 'radio_button_unchecked' : 'close'"
+            size="26px"
+            :aria-label="question.correctAnswer === '沒問題' ? '正確句子' : '錯誤句子'"
+          /><span v-else :lang="question.type === 'particle' ? 'ja' : 'zh-Hant'">{{
+            question.correctAnswer
+          }}</span>
         </p>
-        <p class="feedback-usage">{{ question.example.shortExplanation }}</p>
+        <p v-if="question.type === 'error'" class="feedback-correction" lang="ja">
+          {{
+            question.correctAnswer === '有問題'
+              ? `${question.example.wrongVariant?.wrongParticle} → ${question.example.particle}`
+              : question.example.particle
+          }}
+        </p>
+        <p v-if="question.type !== 'usage'" class="feedback-usage">
+          {{ question.example.shortExplanation }}
+        </p>
         <q-btn
           unelevated
           no-caps

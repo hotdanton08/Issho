@@ -1,6 +1,6 @@
-﻿# Issho 最新交接
+# Issho 最新交接
 
-更新日期：2026-10-06（Asia/Taipei）。此文件反映目前 repository，取代先前 Phase 1 的聊天交接快照。
+更新日期：2026-10-07（Asia/Taipei）。此文件反映目前 repository，取代先前 Phase 1 的聊天交接快照。
 
 原交接與歷史提案完整保留於 `docs/archive/PHASE_1_HANDOFF.md`，僅供歷史參考，不代表現在進度或新增授權。
 
@@ -9,9 +9,10 @@
 1. `AGENTS.md`：開發約束。
 2. `docs/PRODUCT_SPEC.md`：主要產品規格與完整 V0.1 路線。
 3. `README.md`：目前可用功能與啟動方式。
-4. `docs/PHASE_2.md`：本階段變更、驗證及限制。
+4. `docs/PHASE_3.md`：最新階段變更、驗證及限制；`docs/PHASE_2.md` 保存前階段紀錄。
 5. `docs/DEVELOPMENT.md`：兩台電腦協作與同步步驟。
 6. 實際程式碼與 Git 狀態：有本機修改時先辨識來源，不覆蓋。
+7. `docs/CONTENT_RULES.md`：新增或修改題目前必讀的課程編目與內容核對規則。
 
 ## 目前狀態
 
@@ -19,7 +20,9 @@
 - Phase 2 已實作：第 18 課 10 筆原創例句、選助詞 10 題 session、進度、提交後鎖答、判定、短用途回饋、手動繼續、成績、重玩與回首頁。
 - 使用者已試用並確認 Phase 2 沒問題，驗收通過；已授權提交與推送這批程式、測試和文件。
 - 首頁「開始」已接上答題，不再是 Phase 1 空操作。
-- 目前只有選助詞可啟動。其他模式保留設定選項，選取後首頁顯示未開放提示。
+- Phase 3 已實作：選助詞、助詞用途、找錯與混合皆可啟動，沿用同一份例句與統一 Exercise Engine。
+- 依使用者試用回饋：設定預設收合、一次只展開一項；找錯用 ○／× 圖示；單選に用途仍維持原第 18 課 sample 的前に／時間點。
+- 單一助詞可練用途／找錯／混合；混合只用用途與找錯。多助詞混合必須包含三種題型。找錯同組一定有正確與錯誤句。
 - 預設值仍為第 18 課、に／で、particle、音效與語音 ON。
 - 題池只含第 18 課に／で，嚴格依選定課程取題；不存在的範圍不 fallback。
 - session 與作答紀錄只在記憶體；重新整理／離開會清除。localStorage 只有設定，不跨裝置同步。
@@ -28,26 +31,29 @@
 
 `src/data/examples.ts` 是共用例句資料，`src/types/practice.ts` 是資料模型。`src/services/practice.ts` 處理抽題、判定與計分，`src/composables/usePractice.ts` 控制當次流程，`src/components/PracticeSession.vue` 顯示練習 UI。保留既有 settings store 與 storage key。
 
-Sample 以第 18 課的辭書形前に／ことができます句型練習時間點和動作場所，並非宣稱に／で首次在第 18 課出現。不要把 sample 當成正式第 1～25 課內容編目；正式題庫仍須校對。
+**課程歸屬以「本題目標助詞＋具體用法＋搭配句型」為準，不以背景句型或 lesson 數字自行指定。** 使用者已明確要求維持選課的內容意義；不能為讓答案不同而加入其他課的用途。課內只有一種用途時允許答案重複；詢問原因不等於授權改範圍。這些規則適用所有模式及 sample，詳見 `AGENTS.md`、`PRODUCT_SPEC.md` 第 8、22、23 節與 `docs/CONTENT_RULES.md`。
 
-目前沒有 wrongVariant 內容；Phase 3 加入找錯時需補審核過的錯誤句，沿用同一份例句資料，不另建重複題庫。
+目前に sample 已恢復前に的考查位置。既有で／動作場所 sample 的第 18 課歸屬仍需依教材核對，含ことができます不是充分依據，不能宣稱題庫內容驗收已完成。尚未建立正式 1～25 課編目。
+
+10 筆例句皆已補 wrongVariant，僅替換原填空位置的に／で。用途題使用 usageChoices，UI 只標出該填空位置的目標助詞；找錯選項只顯示 ○／×，內部紀錄仍使用沒問題／有問題供之後 AI 匯出辨讀。PracticeQuestion 保存 type、sentence、choices 和 correctAnswer，判定不再假設每題都回答助詞；作答紀錄完整保留顯示題目及實際答案。
 
 ## 後續範圍
 
-- Phase 3：助詞用途、找錯、混合與題型轉換。
+- Phase 3 已實作，等待使用者試用驗收；驗證結果見 `docs/PHASE_3.md`。
 - Phase 4：音效、ja-JP TTS，僅作答後播放正確句。
 - Phase 5：AI Copy、用途統計與 Prompt。
 - Phase 6：PWA、離線、安裝與手機實機驗證。
 - Phase 7：互動穩定後擴充完整題庫。
 
-使用者本次只授權 Phase 2 與文件更新，後續不要自動開始。不要加入帳號、後端、XP、愛心、排行榜、雲端同步或額外導航。
+使用者於 2026-10-07 授權繼續，依既定順序實作 Phase 3 與文件更新；Phase 4 以後不要自動開始。不要加入帳號、後端、XP、愛心、排行榜、雲端同步或額外導航。
 
 ## 已知限制
 
 - 使用 Node 24 LTS／pnpm 10；本機原有 Node 22.15 無法啟動目前 Quasar。package engines 已修正為最低 22.22。
 - vue-router 的 rootDir 提示仍為既有非阻擋訊息。
 - 手機實機尚未驗證。
+- 既有で／動作場所 sample 的課程內容歸屬待核對；自動測試通過不等於教材內容合規。
 - 尚無 TTS、音效播放、AI Copy、PWA／offline。
 - 換電腦前須確認最新 commit 已在 origin/main，再於另一台 pull；同步狀態以 Git 遠端為準，localStorage 不跨裝置同步。
 
-驗證結果與變更索引請看 `docs/PHASE_2.md`。接手時先比對文件與實際程式，再依使用者當次指令工作。
+最新驗證結果與變更索引請看 `docs/PHASE_3.md`。接手時先比對文件與實際程式，再依使用者當次指令工作。

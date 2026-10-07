@@ -15,6 +15,8 @@ git pull --ff-only
 
 閱讀 README、PROJECT_HANDOFF 與最新 Phase 文件，再安裝鎖定依賴：
 
+如果要新增或修改題目，還必須讀 `docs/CONTENT_RULES.md`，先核對目標用法的教材單元歸屬。不能只依 lesson 數字、既有 sample 或另一台的聊天記憶推定內容已正確。
+
 ```bash
 corepack pnpm@10.34.6 install --frozen-lockfile
 corepack pnpm@10.34.6 dev

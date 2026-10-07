@@ -11,19 +11,23 @@ export interface ParticleExample {
   usageChoices: string[];
   shortExplanation: string;
   audioText: string;
+  wrongVariant?: { sentence: string; wrongParticle: Particle };
 }
-export interface ParticleQuestion {
+export type QuestionType = 'particle' | 'usage' | 'error';
+export interface PracticeQuestion {
   example: ParticleExample;
-  type: 'particle';
-  choices: Particle[];
+  type: QuestionType;
+  sentence: string;
+  choices: string[];
+  correctAnswer: string;
 }
 export interface PracticeAnswer {
-  question: ParticleQuestion;
-  answer: Particle;
+  question: PracticeQuestion;
+  answer: string;
   correct: boolean;
 }
 export interface PracticeSession {
   settings: Settings;
-  questions: ParticleQuestion[];
+  questions: PracticeQuestion[];
   answers: PracticeAnswer[];
 }

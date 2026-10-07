@@ -28,5 +28,9 @@ export const EXAMPLES: ParticleExample[] = samples.map(([id, sentence, particle,
     usageChoices: ['時間點', '動作場所', '對象', '手段'],
     shortExplanation: usage,
     audioText: correctSentence,
+    wrongVariant: {
+      sentence: sentence.replace('（　）', particle === 'に' ? 'で' : 'に'),
+      wrongParticle: particle === 'に' ? 'で' : 'に',
+    },
   };
 });
