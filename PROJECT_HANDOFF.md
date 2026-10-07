@@ -52,6 +52,7 @@
 - 使用 Node 24 LTS／pnpm 10；本機原有 Node 22.15 無法啟動目前 Quasar。package engines 已修正為最低 22.22。
 - vue-router 的 rootDir 提示仍為既有非阻擋訊息。
 - 手機實機尚未驗證。
+- Phase 3 與內容規則已上傳至 origin/main（`42a9c94`）。上傳後新增桌面切手機的動態 viewport 檢查：四種指定尺寸通過 Edge Chromium 模擬；尚未重現使用者回報的 Chrome 裁切，待畫面／尺寸／截圖資訊，不可當作已修復。詳見 `docs/PHASE_3.md`。
 - 既有で／動作場所 sample 的課程內容歸屬待核對；自動測試通過不等於教材內容合規。
 - 尚無 TTS、音效播放、AI Copy、PWA／offline。
 - 換電腦前須確認最新 commit 已在 origin/main，再於另一台 pull；同步狀態以 Git 遠端為準，localStorage 不跨裝置同步。
