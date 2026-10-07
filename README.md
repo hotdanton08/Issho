@@ -2,7 +2,7 @@
 
 以 Vue 3、TypeScript、Quasar CLI with Vite 與 Pinia 建立的 mobile-first App。
 
-目前已實作 **Phase 1 App Shell + Phase 2 核心答題 + Phase 3 三種題型**。開啟首頁 → 開始 → 選助詞 → 看短用途回饋 → 繼續 → 完成 10 題。
+目前已實作 **Phase 1 App Shell + Phase 2 核心答題 + Phase 3 三種題型 + Phase 4 聲音**。開啟首頁 → 開始 → 作答 → 看短用途回饋／點圖示聽正確句 → 繼續 → 完成 10 題。
 
 ## 執行
 
@@ -40,7 +40,10 @@ pnpm build
 - 點答案即提交；提交後鎖住選項，只顯示對錯、正解與短用途標籤。按繼續才換題。
 - 完成顯示分數，可再來一組或回首頁；頂部 × 可直接離開。離開或重新整理會放棄當次 session，不影響設定。
 - 作答紀錄與設定快照只留在記憶體。設定不跨裝置同步。
-- 音效／日文語音開關目前只保存偏好；TTS、音效、AI Copy、PWA 與離線功能尚未實作。
+- 音效開關控制答對、答錯與完成的短音效，使用 Web Audio 合成，沒有外部音檔。
+- 日文語音開關控制答題後的播放圖示；手動播放正確完整句、語言 ja-JP，可重播。答錯或找錯也只播放修正後的正確句。換題、重玩、離開會停止聲音。
+- 語音不支援或播放失敗時只顯示短提示，不阻擋答題；日文聲音品質與可用性仍需在使用者瀏覽器／手機上試聽。
+- AI Copy、PWA 與離線功能尚未實作。
 
 ## 結構
 
@@ -48,6 +51,7 @@ pnpm build
 - `src/components/PracticeSession.vue`：題目、短回饋與完成畫面。
 - `src/composables/usePractice.ts`：session 狀態、鎖答、繼續、離開與重玩。
 - `src/services/practice.ts`：精確篩選、抽題、判定與計分。
+- `src/services/audio.ts`、`src/composables/usePracticeAudio.ts`：音效合成、ja-JP 語音、偏好控制與停止／釋放資源。
 - `src/data/examples.ts`、`src/types/practice.ts`：可重用原創例句與題目／紀錄型別。
 - `src/components/PracticeSettings.vue`、`AppSettings.vue`、`SettingsPanel.vue`：設定介面。
 - `src/stores/settings.ts`、`src/services/settings.ts`、`src/types/settings.ts`：設定與 localStorage。
@@ -55,6 +59,8 @@ pnpm build
 
 ## 兩台電腦接續
 
-請依 [同步工作流程](docs/DEVELOPMENT.md)，開始前同步 Git，結束時一起提交程式、測試及文件。最新交接看 [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md)，最新驗證紀錄看 [Phase 3](docs/PHASE_3.md)，先前驗證保留於 [Phase 2](docs/PHASE_2.md)。
+請依 [同步工作流程](docs/DEVELOPMENT.md)，開始前同步 Git，結束時一起提交程式、測試及文件。最新交接看 [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md)，最新驗證紀錄看 [Phase 4](docs/PHASE_4.md)，先前驗證保留於 [Phase 3](docs/PHASE_3.md) 與 [Phase 2](docs/PHASE_2.md)。
 
-下一階段為 Phase 4：音效與日文 TTS；AI Copy 在 Phase 5。後續需要另行授權。產品需求以 `docs/PRODUCT_SPEC.md` 為準。
+下一階段為 Phase 5：完整作答紀錄一鍵複製給 AI。後續需要另行授權。產品需求以 `docs/PRODUCT_SPEC.md` 為準。
+
+Chrome 手機預覽若被下方 DevTools 截住，將裝置工具列的 100% 改成 50% 或可容納整個裝置的比例；這是預覽視窗大小，App 內容未溢出時捲動頁面無法顯示預覽框外的區域。

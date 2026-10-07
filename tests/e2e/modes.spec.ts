@@ -86,7 +86,7 @@ for (const [width, height] of [
         expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(
           true,
         );
-        await expect(page.getByRole('button', { name: /播放|語音/ })).toHaveCount(0);
+        await expect(page.getByRole('button', { name: '播放正確日文句子' })).toBeVisible();
         if (index === 7)
           await page.screenshot({
             path: `test-results/phase3-${mode.label}-${mode.single}-${width}x${height}.png`,

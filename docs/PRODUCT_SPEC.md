@@ -1,6 +1,6 @@
 # 大家的日本語助詞練習 App
 
-> 實作進度（2026-10-07）：Phase 1 App Shell、Phase 2 選助詞核心流程與 Phase 3 用途／找錯／混合已實作。沿用第 18 課 10 筆原創 に／で sample；聲音、AI Copy、PWA 與正式題庫依下方 Phase 規劃逐步加入。此文件描述完整 V0.1 目標，不代表所有功能目前已開放。最新驗證紀錄見 `docs/PHASE_3.md`，跨電腦工作方式見 `docs/DEVELOPMENT.md`。
+> 實作進度（2026-10-07）：Phase 1 App Shell、Phase 2 選助詞核心流程、Phase 3 用途／找錯／混合及 Phase 4 聲音已實作。沿用第 18 課 10 筆原創 に／で sample；AI Copy、PWA 與正式題庫依下方 Phase 規劃逐步加入。此文件描述完整 V0.1 目標，不代表所有功能目前已開放。最新驗證紀錄見 `docs/PHASE_4.md`，跨電腦工作方式見 `docs/DEVELOPMENT.md`。
 
 ## 1. 產品定位
 

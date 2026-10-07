@@ -20,7 +20,14 @@ export function usePractice() {
     index.value = 0;
   }
   function answer(choice: string) {
-    if (session.value && !feedback.value && !finished.value) submitAnswer(session.value, choice);
+    if (
+      session.value &&
+      !feedback.value &&
+      !finished.value &&
+      submitAnswer(session.value, choice)
+    ) {
+      return session.value.answers[index.value];
+    }
   }
   function next() {
     if (feedback.value) index.value++;

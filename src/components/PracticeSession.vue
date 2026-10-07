@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { usePractice } from '../composables/usePractice';
+import { usePracticeAudio } from '../composables/usePracticeAudio';
 import { computed } from 'vue';
 import type { Settings } from '../types/settings';
 
@@ -8,6 +9,8 @@ const emit = defineEmits<{ leave: [] }>();
 const { session, index, question, feedback, finished, score, progress, start, answer, next } =
   usePractice();
 start(props.settings);
+const { speechEnabled, speechSupported, speechError, playEffect, playSentence, stopAudio } =
+  usePracticeAudio(() => props.settings);
 const title = computed(() =>
   question.value?.type === 'usage'
     ? '這個助詞表示什麼？'
@@ -17,7 +20,22 @@ const title = computed(() =>
 );
 const sentenceParts = computed(() => question.value?.example.sentenceWithBlank.split('（　）'));
 function restart() {
+  stopAudio();
   if (session.value) start(session.value.settings);
+}
+function submitChoice(choice: string) {
+  if (feedback.value || finished.value) return;
+  const result = answer(choice);
+  if (result) playEffect(result.correct ? 'correct' : 'incorrect');
+}
+function advance() {
+  if (!feedback.value) return;
+  stopAudio();
+  next();
+  if (finished.value) playEffect('complete');
+}
+function speakAnswer() {
+  if (feedback.value && question.value) playSentence(question.value.example.correctSentence);
 }
 </script>
 
@@ -89,7 +107,7 @@ function restart() {
                 : particle
             "
             :lang="question.type === 'particle' ? 'ja' : 'zh-Hant'"
-            @click="answer(particle)"
+            @click="submitChoice(particle)"
           />
         </div>
       </main>
@@ -103,6 +121,15 @@ function restart() {
         <div class="feedback-title">
           <q-icon :name="feedback.correct ? 'check_circle' : 'cancel'" size="26px" />
           <strong>{{ feedback.correct ? '正確！' : '不對' }}</strong>
+          <q-btn
+            v-if="speechEnabled && speechSupported"
+            flat
+            round
+            icon="volume_up"
+            class="speech-button"
+            aria-label="播放正確日文句子"
+            @click="speakAnswer"
+          />
         </div>
         <p class="feedback-answer">
           {{ feedback.correct ? '' : '正解：'
@@ -125,13 +152,16 @@ function restart() {
         <p v-if="question.type !== 'usage'" class="feedback-usage">
           {{ question.example.shortExplanation }}
         </p>
+        <p v-if="speechEnabled && (!speechSupported || speechError)" class="speech-hint">
+          {{ speechSupported ? speechError : '此瀏覽器不支援語音播放' }}
+        </p>
         <q-btn
           unelevated
           no-caps
           color="primary"
           label="繼續"
           class="primary-button"
-          @click="next"
+          @click="advance"
         />
       </section>
     </template>

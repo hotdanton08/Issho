@@ -425,6 +425,16 @@ button {
   gap: 9px;
   font-size: 20px;
 }
+.speech-button {
+  margin-left: auto;
+  min-width: 48px;
+  min-height: 48px;
+  color: inherit;
+}
+.speech-hint {
+  font-size: 13px;
+  margin: 0 0 12px;
+}
 .feedback-answer {
   font-size: 23px;
   margin: 8px 0 0;
