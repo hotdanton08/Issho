@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { usePractice } from '../composables/usePractice';
 import { usePracticeAudio } from '../composables/usePracticeAudio';
+import { useAiCopy } from '../composables/useAiCopy';
 import { computed } from 'vue';
 import type { Settings } from '../types/settings';
 
@@ -11,6 +12,10 @@ const { session, index, question, feedback, finished, score, progress, start, an
 start(props.settings);
 const { speechEnabled, speechSupported, speechError, playEffect, playSentence, stopAudio } =
   usePracticeAudio(() => props.settings);
+const { copying, copied, copyError, manualText, copyForAi, resetCopy } = useAiCopy(
+  () => session.value,
+  () => finished.value,
+);
 const title = computed(() =>
   question.value?.type === 'usage'
     ? '這個助詞表示什麼？'
@@ -20,6 +25,7 @@ const title = computed(() =>
 );
 const sentenceParts = computed(() => question.value?.example.sentenceWithBlank.split('（　）'));
 function restart() {
+  resetCopy();
   stopAudio();
   if (session.value) start(session.value.settings);
 }
@@ -36,6 +42,9 @@ function advance() {
 }
 function speakAnswer() {
   if (feedback.value && question.value) playSentence(question.value.example.correctSentence);
+}
+function selectExport(event: FocusEvent) {
+  if (event.target instanceof HTMLTextAreaElement) event.target.select();
 }
 </script>
 
@@ -166,7 +175,7 @@ function speakAnswer() {
       </section>
     </template>
     <main v-else class="completion-main">
-      <q-icon name="task_alt" size="84px" color="primary" />
+      <q-icon name="task_alt" class="completion-icon" color="primary" />
       <h1>完成！</h1>
       <p class="completion-score">
         {{ score }} <span>/ {{ session?.questions.length }}</span>
@@ -179,6 +188,29 @@ function speakAnswer() {
         label="再來一組"
         class="primary-button"
         @click="restart"
+      />
+      <q-btn
+        outline
+        no-caps
+        color="primary"
+        :icon="copied ? 'check' : 'content_copy'"
+        :label="copied ? '已複製' : '複製給 AI'"
+        :loading="copying"
+        :disable="copying"
+        class="ai-copy-button"
+        @click="copyForAi"
+      />
+      <p v-if="copyError" class="copy-status" role="status" aria-live="polite">
+        {{ copyError }}
+      </p>
+      <textarea
+        v-if="manualText"
+        :value="manualText"
+        readonly
+        rows="5"
+        class="manual-export"
+        aria-label="手動複製練習紀錄"
+        @focus="selectExport"
       />
       <q-btn flat no-caps label="回首頁" class="completion-home" @click="emit('leave')" />
     </main>
