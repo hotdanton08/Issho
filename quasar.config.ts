@@ -175,6 +175,12 @@ export default defineConfig((/* ctx */) => {
     // https://v2.quasar.dev/quasar-cli-vite/developing-pwa/configuring-pwa
     pwa: {
       workboxMode: 'GenerateSW', // 'GenerateSW' or 'InjectManifest'
+      injectPWAMetaTags: ({ publicPath }) =>
+        `<meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="いっしょ"><link rel="apple-touch-icon" sizes="180x180" href="${publicPath}icons/apple-icon-180x180.png">`,
+      extendPWAGenerateSWOptions: (options) => {
+        // Activate on the next visit; replacing the worker mid-session can lose a lazy chunk.
+        options.skipWaiting = false;
+      },
       // swFilename: 'sw.js',
       // manifestFilename: 'manifest.json',
       // extendPWAManifestJson (json) {},

@@ -19,10 +19,13 @@ git pull --ff-only
 
 ```bash
 corepack pnpm@10.34.6 install --frozen-lockfile
+corepack pnpm@10.34.6 --dir src-pwa install --frozen-lockfile
 corepack pnpm@10.34.6 dev
 ```
 
 兩台皆建議 Node 24 LTS（最低 Node 22.22）、pnpm 10；瀏覽器測試使用 Microsoft Edge。
+
+Phase 6 起預設為 PWA。Quasar 的 `src-pwa` 使用獨立 package 與 lockfile，兩份都要安裝，不要改用 npm。正式離線驗證使用 `pnpm build` 後的 `pnpm preview:pwa`（http://127.0.0.1:9002/）與 `pnpm test:pwa`；dev 不代表正式離線快取。9000 與 9002 是不同 origin，localStorage 設定分開保存。
 
 ## 結束工作
 
@@ -30,6 +33,7 @@ corepack pnpm@10.34.6 dev
 - 更新 README 與 PROJECT_HANDOFF 的實作狀態；Phase 文件記錄實際驗證與未解決問題。
 - 修改需求時才更新 PRODUCT_SPEC；不要把未完成 roadmap 寫成已完成。
 - 同一筆 commit 包含相關程式碼、測試、文件及必要 lockfile。
+- 提交訊息、PR 與上傳說明以中文為主（使用者要求）。
 
 ```bash
 git diff --stat

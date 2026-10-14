@@ -194,7 +194,7 @@ function selectExport(event: FocusEvent) {
         no-caps
         color="primary"
         :icon="copied ? 'check' : 'content_copy'"
-        :label="copied ? '已複製' : '複製給 AI'"
+        :label="copied ? '已複製' : '複製結果'"
         :loading="copying"
         :disable="copying"
         class="ai-copy-button"

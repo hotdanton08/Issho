@@ -3,7 +3,7 @@ import { EXAMPLES } from '../../src/data/examples';
 
 async function finishPractice(page: Page) {
   await page.getByRole('button', { name: '開始', exact: true }).click();
-  await expect(page.getByRole('button', { name: '複製給 AI' })).toHaveCount(0);
+  await expect(page.getByRole('button', { name: '複製結果' })).toHaveCount(0);
   const records: string[] = [];
   for (let index = 0; index < 10; index++) {
     const sentence = await page.locator('.question-sentence').innerText();
@@ -82,7 +82,7 @@ for (const [width, height] of [
     await page.getByRole('button', { name: '混合', exact: true }).click();
     await page.getByRole('button', { name: '完成', exact: true }).click();
     const records = await finishPractice(page);
-    const copy = page.getByRole('button', { name: '複製給 AI', exact: true });
+    const copy = page.getByRole('button', { name: '複製結果', exact: true });
     await expect(copy).toBeInViewport();
     await copy.click();
     await expect(page.getByRole('button', { name: '已複製', exact: true })).toBeVisible();
@@ -107,7 +107,7 @@ for (const [width, height] of [
     await expect(page.getByText('已複製，可直接貼給 AI 分析')).toHaveCount(0);
     await page.getByRole('button', { name: '離開練習' }).click();
     await finishPractice(page);
-    await expect(page.getByRole('button', { name: '複製給 AI', exact: true })).toBeVisible();
+    await expect(page.getByRole('button', { name: '複製結果', exact: true })).toBeVisible();
   });
 }
 
@@ -117,7 +117,7 @@ for (const behavior of ['fail-once', 'missing'] as const) {
     await page.setViewportSize({ width: 375, height: 667 });
     await page.goto('/');
     await finishPractice(page);
-    await page.getByRole('button', { name: '複製給 AI', exact: true }).click();
+    await page.getByRole('button', { name: '複製結果', exact: true }).click();
     await expect(page.getByRole('status')).toContainText('無法自動複製');
     await expect(page.getByRole('button', { name: '已複製', exact: true })).toHaveCount(0);
     const manual = page.getByRole('textbox', { name: '手動複製練習紀錄' });
@@ -131,7 +131,7 @@ for (const behavior of ['fail-once', 'missing'] as const) {
       }),
     ).toBe(true);
     if (behavior === 'fail-once') {
-      await page.getByRole('button', { name: '複製給 AI', exact: true }).click();
+      await page.getByRole('button', { name: '複製結果', exact: true }).click();
       await expect(page.getByRole('button', { name: '已複製', exact: true })).toBeVisible();
       await expect(manual).toHaveCount(0);
     }
@@ -151,11 +151,11 @@ test('a late clipboard result does not mark a new session as copied', async ({ p
   );
   await page.goto('/');
   await finishPractice(page);
-  await page.getByRole('button', { name: '複製給 AI', exact: true }).click();
+  await page.getByRole('button', { name: '複製結果', exact: true }).click();
   await page.getByRole('button', { name: '再來一組', exact: true }).click();
   await page.evaluate(() => (Reflect.get(window, '__finishCopy') as () => void)());
   await page.getByRole('button', { name: '離開練習' }).click();
   await finishPractice(page);
-  await expect(page.getByRole('button', { name: '複製給 AI', exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: '複製結果', exact: true })).toBeVisible();
   await expect(page.getByRole('button', { name: '已複製', exact: true })).toHaveCount(0);
 });

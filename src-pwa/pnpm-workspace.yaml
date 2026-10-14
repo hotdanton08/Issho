@@ -1,0 +1,3 @@
+# Quasar PWA mode has its own dependencies and lockfile.
+packages:
+  - '.'
