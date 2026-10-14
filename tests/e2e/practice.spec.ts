@@ -57,5 +57,5 @@ test('unavailable lessons do not silently use lesson 18', async ({ page }) => {
   await page.getByRole('button', { name: '第 17 課', exact: true }).click();
   await page.getByRole('button', { name: '完成', exact: true }).click();
   await expect(page.getByRole('button', { name: '開始', exact: true })).toBeDisabled();
-  await expect(page.getByRole('status')).toContainText('目前有第 18 課');
+  await expect(page.getByRole('status')).toContainText('沒有相符題目');
 });

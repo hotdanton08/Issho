@@ -33,7 +33,7 @@ Phase 6 起預設為 PWA。Quasar 的 `src-pwa` 使用獨立 package 與 lockfil
 - 更新 README 與 PROJECT_HANDOFF 的實作狀態；Phase 文件記錄實際驗證與未解決問題。
 - 修改需求時才更新 PRODUCT_SPEC；不要把未完成 roadmap 寫成已完成。
 - 同一筆 commit 包含相關程式碼、測試、文件及必要 lockfile。
-- 提交訊息、PR 與上傳說明以中文為主（使用者要求）。
+- Git commit 標題與內文、PR 及上傳說明必須使用繁體中文；技術名稱可保留英文，不得整筆只寫英文（使用者要求，亦記錄於 AGENTS.md）。
 
 ```bash
 git diff --stat

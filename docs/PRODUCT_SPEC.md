@@ -1,10 +1,12 @@
 # 大家的日本語助詞練習 App
 
-> 實作進度（2026-10-08）：Phase 1～5 已實作；Phase 6 已加入 PWA 建置、安裝資訊與正式版離線練習，手機實機安裝仍待驗收。沿用第 18 課 10 筆原創 に／で sample，正式題庫尚未擴充。此文件描述完整 V0.1 目標，不代表所有功能目前已開放。最新驗證紀錄見 `docs/PHASE_6.md`，跨電腦工作方式見 `docs/DEVELOPMENT.md`。
+> 實作進度（2026-10-14）：Phase 1～5 已實作；Phase 6 已加入 PWA，手機實機安裝仍待驗收。Phase 7 第一批加入第 1～6 課，並修正第 18 課的考查位置，共 60 筆原創例句；其餘課次尚未加入。教材固定採大新《大家的日本語》初級 I・II 改訂版。最新進度見 `docs/PHASE_7.md`，編目依據見 `docs/CONTENT_CATALOG.md`，跨電腦工作方式見 `docs/DEVELOPMENT.md`。
 
 ## 1. 產品定位
 
 一款以《大家的日本語》課程進度為骨架的手機日文助詞練習 App。
+
+教材版本依使用者 2026-10-14 指示，固定採大新出版《大家的日本語》初級 I・II 改訂版（使用者稱初版修訂版）。大新官方對應書名為 `みんなの日本語 初級Ⅰ 第2版 本冊`。不得混用原第一版或第三版的課程表；版本與核對來源記錄於 `docs/CONTENT_CATALOG.md`。
 
 產品不是電子課本，也不是傳統考卷。
 
@@ -717,6 +719,7 @@ V0.1 預設：
 ```ts
 interface ParticleExample {
   id: string
+  targetId: string
   lesson: number
 
   correctSentence: string
@@ -742,19 +745,20 @@ interface ParticleExample {
 
 ```ts
 {
-  id: 'l05-ni-arrival-001',
+  id: 'l05-he-destination-01',
+  targetId: 'l05-he-destination',
   lesson: 5,
 
-  correctSentence: '学校に行きます。',
+  correctSentence: '学校へ行きます。',
   sentenceWithBlank: '学校（　）行きます。',
 
-  particle: 'に',
-  usage: '到達點',
+  particle: 'へ',
+  usage: '方向',
 
   distractorParticles: ['で', 'を', 'が'],
 
   usageChoices: [
-    '到達點',
+    '方向',
     '時間點',
     '動作場所',
     '對象'
@@ -765,8 +769,8 @@ interface ParticleExample {
     wrongParticle: 'で'
   },
 
-  shortExplanation: '到達點',
-  audioText: '学校に行きます。'
+  shortExplanation: '方向',
+  audioText: '学校へ行きます。'
 }
 ```
 

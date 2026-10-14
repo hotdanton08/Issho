@@ -4,6 +4,8 @@
 
 目前已實作 **Phase 1～5**，並加入 **Phase 6 的 PWA 與離線練習**；手機實機安裝仍待驗收。開啟首頁 → 開始 → 作答 → 短回饋／聽正確句 → 完成 10 題 → 複製結果。
 
+**Phase 7 第一批**已加入第 1～6 課，並整理第 18 課，共 60 筆原創例句。教材採大新《大家的日本語》初級 I・II 改訂版；其餘課次尚未加入。版本與課別依據見 [CONTENT_CATALOG.md](docs/CONTENT_CATALOG.md)。
+
 ## 執行
 
 使用 **Node 24 LTS**（Quasar 最低需要 Node 22.22）及 pnpm 10。兩台電腦請使用相同工具版本與 `pnpm-lock.yaml`。
@@ -41,10 +43,10 @@ pnpm test:pwa
 ## 目前行為
 
 - 預設第 18 課、に／で、選助詞；設定以 `issho.settings.v1` 即時保存。
-- 第 18 課共 10 筆原創 sample：5 題含「動詞辭書形＋前に」，5 題含「場所で＋ことができます」。に 的目標用途為前に／時間點，で 為動作場所；同句其他助詞不當成判斷目標。
+- 第 1～6、18 課共 60 筆原創例句；第 18 課有 10 筆前に及 3 筆ことができます中的が。動作場所で改為第 6 課的普通ます形句子；同句其他助詞不當成判斷目標。
 - 每組 10 題，隨機題序及選項順序。優先使用未出過的相符例句，題池不足時重用例句補至 10 題；預設雙助詞設定每組不重複。
-- 嚴格依已選課程及助詞篩選，只使用例句中已審核且被選取的錯誤選項。目前只有 に／で 對比，不將所有已選助詞硬塞成選項。
-- 課程須按目標助詞的具體用法與句型核對，不能只靠背景句型或 lesson 數字；規則見 [CONTENT_RULES.md](docs/CONTENT_RULES.md)。既有で／動作場所 sample 的第 18 課歸屬仍待教材核對，未完成內容驗收。
+- 嚴格依已選課程及助詞篩選，只使用例句中已審核且被選取的錯誤選項，不將所有已選助詞硬塞成選項。方向へ不把也能成立的に當錯誤選項。
+- 課程須按目標助詞的具體用法與句型核對，不能只靠背景句型或 lesson 數字；規則見 [CONTENT_RULES.md](docs/CONTENT_RULES.md)。例句依 targetId 綁定已核對的課次及用法，不各自任意填課號。
 - 選助詞、助詞用途、找錯與混合皆已開放；沒有相符題目時顯示提示並停用開始，不自動切模式或課程。
 - 練習設定每次開啟都收合；點範圍／助詞／模式才展開，同時只開一項。全選／清空僅在展開後顯示。
 - 用途題標出目標助詞，允許單一助詞。找錯使用 ○／× 圖示選項（保留無障礙標籤），每組同時含正確與錯誤句，單模式各 5 題；錯誤助詞可以在選取範圍外，練習目標仍以正確句助詞篩選。
@@ -68,7 +70,7 @@ pnpm test:pwa
 - `src/services/practice.ts`：精確篩選、抽題、判定與計分。
 - `src/services/audio.ts`、`src/composables/usePracticeAudio.ts`：音效合成、ja-JP 語音、偏好控制與停止／釋放資源。
 - `src/services/aiExport.ts`、`src/composables/useAiCopy.ts`：精簡匯出、Clipboard 寫入與失敗時手動複製。
-- `src/data/examples.ts`、`src/types/practice.ts`：可重用原創例句與題目／紀錄型別。
+- `src/data/curriculum.ts`、`src/data/examples.ts`、`src/types/practice.ts`：課程目標依據、共用原創例句與題目／紀錄型別。
 - `src/components/PracticeSettings.vue`、`AppSettings.vue`、`SettingsPanel.vue`：設定介面。
 - `src/stores/settings.ts`、`src/services/settings.ts`、`src/types/settings.ts`：設定與 localStorage。
 - `tests/practice.test.ts`、`tests/settings.test.ts`、`tests/e2e/`：邏輯與瀏覽器測試。
@@ -77,8 +79,8 @@ pnpm test:pwa
 
 ## 兩台電腦接續
 
-請依 [同步工作流程](docs/DEVELOPMENT.md)，開始前同步 Git，結束時一起提交程式、測試及文件。最新交接看 [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md)，最新驗證紀錄看 [Phase 6](docs/PHASE_6.md)，先前驗證保留於 Phase 2～5 文件。
+請依 [同步工作流程](docs/DEVELOPMENT.md)，開始前同步 Git，結束時一起提交程式、測試及文件。最新交接看 [PROJECT_HANDOFF.md](PROJECT_HANDOFF.md)，最新進度看 [Phase 7](docs/PHASE_7.md)，先前驗證保留於 Phase 2～6 文件。
 
-Phase 5 已上傳（`f9156f8`）。使用者於 2026-10-14 授權上傳 Phase 6 與「複製結果」文字修改；另一台先 fetch／pull，並安裝根目錄及 src-pwa 的鎖定依賴，同步狀態以 Git 遠端為準。產品需求以 `docs/PRODUCT_SPEC.md` 為準。
+Phase 6 與「複製結果」文字已上傳（`0acd7d9`）。使用者已驗收 Phase 7 第一批並授權上傳；另一台先 fetch／pull，並安裝根目錄及 src-pwa 的鎖定依賴，同步狀態以 Git 遠端為準。產品需求以 `docs/PRODUCT_SPEC.md` 為準。
 
 Chrome 手機預覽若被下方 DevTools 截住，將裝置工具列的 100% 改成 50% 或可容納整個裝置的比例；這是預覽視窗大小，App 內容未溢出時捲動頁面無法顯示預覽框外的區域。

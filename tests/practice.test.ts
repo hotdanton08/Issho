@@ -29,7 +29,7 @@ describe('Phase 2 practice', () => {
     expect(eligibleExamples(settings, [...EXAMPLES, other])).not.toContain(other);
     settings.selectedLessons = [17];
     expect(eligibleExamples(settings)).toEqual([]);
-    expect(() => createSession(settings)).toThrow('目前有第 18 課');
+    expect(() => createSession(settings)).toThrow('沒有相符題目');
     settings.selectedLessons = [16, 17, 18];
     expect(eligibleExamples(settings, [...EXAMPLES, other])).toHaveLength(11);
     settings.selectedParticles = ['に', 'を'];

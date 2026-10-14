@@ -2,6 +2,7 @@ import type { Particle, Settings } from './settings';
 
 export interface ParticleExample {
   id: string;
+  targetId: string;
   lesson: number;
   correctSentence: string;
   sentenceWithBlank: string;

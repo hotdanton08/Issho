@@ -44,7 +44,7 @@ export function practiceIssue(settings: Settings, examples = EXAMPLES): string {
   const issue = settingsIssue(settings);
   if (issue) return issue;
   if (questionTypes(settings).some((type) => !eligibleExamples(settings, examples, type).length))
-    return '目前有第 18 課的 に・で 題目，請調整設定';
+    return '這個範圍沒有相符題目，請調整設定';
   return '';
 }
 
